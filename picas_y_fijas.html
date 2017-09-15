@@ -7,6 +7,12 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <title>Picas y fijas</title>
   <style media="screen">
+  html, body
+  {
+    width: 100%;
+    height: 100%;
+  }
+
   h1 {
     font-size: 60px;
   }
@@ -21,9 +27,9 @@
     flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
-    height: 958px;
     overflow-y: auto;
     color: white;
+    height: 100%
   }
 
   table {
@@ -32,15 +38,33 @@
     width: 220px;
     margin: 50px 0px;
   }
+
+  input {
+    width: 20%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  span {
+    color: red;
+  }
+
+  td {
+    text-align: center;
+  }
+  
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Picas y fijas</h1>
     <h2>Ingresa cuatro dígitos diferentes y oprime Enter</h2>
-    <form>
-      <input type="number" name="input-number" id="" placeholder="Ingresa tu número">
-    </form>
+
+    <input type="number" name="input-number" id="" placeholder="Ingresa tu número">
 
     <table>
       <thead>
@@ -55,6 +79,35 @@
   </div>
 
   <script type="text/javascript">
+
+  $(document).ready(function(event) {
+    var randNum = GenNumber()
+    $(document).keypress(function(e) {
+      if(e.which == 13) {
+        var $num = $('input').val()
+        var okay = validate($num)
+        if (okay === true){
+          console.log(`Input: ${$num}`)
+          console.log(`Random: ${randNum}`)
+          picas = 0
+          fijas = 0
+          randNum.split('').forEach(function(randValue, randIndex){
+            $num.split('').forEach(function(value, index){
+              if (randValue === value){
+                randIndex === index ? fijas++ : picas++
+              }
+            })
+          })
+          console.log(`picas: ${picas}`);
+          console.log(`fijas: ${fijas}`);
+          $('tbody').html(`<tr><td>${$num}</td><td>${picas}</td><td>${fijas}</td></tr>`)
+          if (fijas === randNum.length) {
+
+          }
+        }
+      }
+    })
+  })
 
   const GenNumber = function () {
     var rep = 0
@@ -72,29 +125,29 @@
         rep === 1 ? i-- : num_arr.push(current)
       }
     }
-    num_arr = num_arr.join().replace(/,/g,'')
-    return num_arr
+    var num_str = num_arr.join().replace(/,/g,'')
+    return num_str
   }
 
-    $(document).keypress(function(e) {
-      if(e.which == 13) {
-        console.log(value)
-        var $num = $('input').val()
-        if ($num.length != 4) { $('h2').html('El número ingresado debe ser de 4 dígitos') }
-        else {
-          $num = $num.split('')
-          var rep = 0
-          $num.forEach(function(value) {
-
-          })
+  const validate = function(arr) {
+    var okay = false
+    if (arr.length != 4) { $('h2').html('<span>El número ingresado debe ser de 4 dígitos</span>') }
+    else {
+      arr = arr.split('')
+      rep = 0
+      for (var i = 0; i < arr.length - 1; i++) {
+        for (var j = (i+1); j < arr.length; j++) {
+          if (arr[i] === arr[j]) rep = 1
         }
       }
-    });
-
-
-
-
-
+      if (rep === 1) { $('h2').html('<span>No pueden haber números repetidos</span>') }
+      else {
+        $('h2').html('Ingresa cuatro dígitos diferentes y oprime Enter')
+        okay = true
+      }
+    }
+    return okay
+  }
   </script>
 </body>
 </html>
