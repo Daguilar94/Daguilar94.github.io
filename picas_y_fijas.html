@@ -63,6 +63,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    text-align: center
   }
 
   span {
@@ -126,14 +127,30 @@
   <script type="text/javascript">
 
   $(document).ready(function(event) {
+
+    Game()
+
+    $('button').on('click', function(){
+      $('.modal').css('display', 'none')
+      location.reload();
+    })
+    $('body').click(function(e){
+      $('.modal').css('display', 'none')
+    })
+    $('.modal').on('click', function(e){
+      e.stopPropagation()
+    })
+  })
+
+  const Game = function(){
     var randNum = GenNumber()
     $(document).keypress(function(e) {
       if(e.which == 13) {
         var $num = $('input').val()
-        var okay = validate($num)
+        var okay = Validate($num)
         if (okay === true){
           $('input').val('')
-          console.log(`Input: ${$num}`)
+          // console.log(`Input: ${$num}`)
           console.log(`Random: ${randNum}`)
           picas = 0
           fijas = 0
@@ -144,27 +161,17 @@
               }
             })
           })
-          console.log(`picas: ${picas}`);
-          console.log(`fijas: ${fijas}`);
+          // console.log(`picas: ${picas}`);
+          // console.log(`fijas: ${fijas}`);
           $('tbody').append(`<tr><td>${$num}</td><td>${picas}</td><td>${fijas}</td></tr>`)
           if (fijas === randNum.length) {
-            $('.modal').css('display', 'block')
-            $('tbody').html('')
+            $('.modal').css('display', 'block').hide().fadeIn(800)
+            // $('tbody').html('')
           }
         }
       }
     })
-  })
-
-  $('button').on('click', function(){
-    $('.modal').css('display', 'none')
-  })
-  $('body').click(function(e){
-    $('.modal').css('display', 'none')
-  })
-  $('.modal').on('click', function(e){
-    e.stopPropagation()
-  })
+  }
 
 
   const GenNumber = function () {
@@ -187,7 +194,7 @@
     return num_str
   }
 
-  const validate = function(arr) {
+  const Validate = function(arr) {
     var okay = false
     if (arr.length != 4) { $('h2').html('<span>El número ingresado debe ser de 4 dígitos</span>') }
     else {
