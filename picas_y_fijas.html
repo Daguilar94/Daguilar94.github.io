@@ -56,7 +56,7 @@
   td {
     text-align: center;
   }
-  
+
   </style>
 </head>
 <body>
@@ -87,6 +87,7 @@
         var $num = $('input').val()
         var okay = validate($num)
         if (okay === true){
+          $('input').val('')
           console.log(`Input: ${$num}`)
           console.log(`Random: ${randNum}`)
           picas = 0
