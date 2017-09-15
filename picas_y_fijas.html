@@ -5,12 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
   <title>Picas y fijas</title>
   <style media="screen">
   html, body
   {
     width: 100%;
     height: 100%;
+    font-family: 'Archivo Narrow', sans-serif;
   }
 
   h1 {
@@ -21,12 +23,26 @@
     font-size: 25px;
   }
 
+  button {
+    padding: 10px 15px;
+    background-color: #D33;
+    border-radius: 20px;
+    font-size: 28px;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .modal-content p {
+    font-size: 140px;
+  }
+
   .container {
-    background-color: #666;
+    background-color: #222;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
+    padding: 20px 30px;
     overflow-y: auto;
     color: white;
     height: 100%
@@ -57,10 +73,39 @@
     text-align: center;
   }
 
+  .modal {
+    display: none;
+    position: fixed;
+    width: 80%;
+    height: 80%;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 1;
+    overflow: auto;
+    border-radius: 15%;
+    color: #222;
+  }
+
+  .modal-content {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 100%;
+    margin: 0 auto;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+  }
   </style>
 </head>
 <body>
   <div class="container">
+
+    <div class="modal">
+      <div class="modal-content">
+        <p>¡Ganaste!</p>
+        <button type="submit" name="button">Jugar nuevamente</button>
+      </div>
+    </div>
+
     <h1>Picas y fijas</h1>
     <h2>Ingresa cuatro dígitos diferentes y oprime Enter</h2>
 
@@ -101,14 +146,26 @@
           })
           console.log(`picas: ${picas}`);
           console.log(`fijas: ${fijas}`);
-          $('tbody').html(`<tr><td>${$num}</td><td>${picas}</td><td>${fijas}</td></tr>`)
+          $('tbody').append(`<tr><td>${$num}</td><td>${picas}</td><td>${fijas}</td></tr>`)
           if (fijas === randNum.length) {
-
+            $('.modal').css('display', 'block')
+            $('tbody').html('')
           }
         }
       }
     })
   })
+
+  $('button').on('click', function(){
+    $('.modal').css('display', 'none')
+  })
+  $('body').click(function(e){
+    $('.modal').css('display', 'none')
+  })
+  $('.modal').on('click', function(e){
+    e.stopPropagation()
+  })
+
 
   const GenNumber = function () {
     var rep = 0
